@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: v1
 kind: Deployment
 metadata:
   name: nginx-deployment
@@ -16,7 +16,17 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: angi
         imagePullPolicy: Never
+        image: angi
         ports:
         - containerPort: 80
+kind: Service
+metadata:
+  name: snginx
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
