@@ -1,9 +1,30 @@
 FROM alpine:latest
 
-RUN apk --no-cache add \
-        libressl \
-        lftp
+RUN apk --no-cache add vsftpd openssl
+
+RUN touch /etc/vsftpd.chroot_list
+COPY srcs/vsftpd.conf /etc/vsftpd/vsftpd.conf
+RUN mkdir /ftp && touch /ftp/testfile
+
+RUN adduser \
+    --disabled-password \
+    --home "/ftp" \
+    --no-create-home \
+    uftp
+
+RUN passwd uftp -d '1234'
+
+RUN chown uftp /ftp
+RUN chgrp uftp /ftp
+
+# RUN mkdir /etc/ssl/private
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout /etc/ssl/private/vsftpd.key -out /etc/ssl/certs/vsftpd.crt \
+    -subj "/C=FR/ST=Denial/L=-/O=-/CN=127.0.0.1"
 
 EXPOSE 21
+EXPOSE 20
+EXPOSE 31100-31110
 
-CMD tail -f /dev/null
+CMD vsftpd /etc/vsftpd/vsftpd.conf
+# CMD tail -f /dev/null
