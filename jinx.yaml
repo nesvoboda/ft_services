@@ -96,11 +96,6 @@ spec:
   selector:
     app: ftps
   ports:
-    - name: ftp-21
-      port: 21
-    - name: ftp-20
-      port: 20
-      nodePort: 30138
     - name: ftp-31100
       nodePort: 31100
       port: 31100
@@ -164,5 +159,5 @@ spec:
     app: ftps
   ports:
     - name: ftp-21
-      port: 21
+      port: 3500
       targetPort: 21

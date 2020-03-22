@@ -1,0 +1,10 @@
+spec:
+  template:
+    spec:
+      containers:
+      - name: nginx-ingress-controller
+        ports:
+         - containerPort: 20
+           hostPort: 20
+         - containerPort: 21
+           hostPort: 21
