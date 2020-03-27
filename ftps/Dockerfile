@@ -6,6 +6,10 @@ RUN touch /etc/vsftpd.chroot_list
 COPY srcs/vsftpd.conf /etc/vsftpd/vsftpd.conf
 RUN mkdir /ftp && touch /ftp/testfile
 
+# Telegraf setup
+RUN apk add telegraf --repository http://nl.alpinelinux.org/alpine/edge/testing
+COPY srcs/telegraf.conf /etc/telegraf.conf
+
 RUN adduser \
     --disabled-password \
     --home "/ftp" \
@@ -26,5 +30,5 @@ EXPOSE 21
 EXPOSE 20
 EXPOSE 31100-31110
 
-CMD vsftpd /etc/vsftpd/vsftpd.conf
+CMD export TELEGRAF_CONFIG_PATH="/etc/telegraf.conf"; telegraf & vsftpd /etc/vsftpd/vsftpd.conf
 # CMD tail -f /dev/null

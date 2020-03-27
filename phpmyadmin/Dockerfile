@@ -7,7 +7,7 @@ RUN apk update
 RUN apk add openrc wget lighttpd php7-common php7-iconv php7-json php7-gd \
 php7-curl php7-xml php7-mysqli php7-imap php7-cgi fcgi php7-pdo php7-pdo_mysql \
 php7-soap php7-xmlrpc php7-posix php7-mcrypt php7-gettext php7-ldap php7-ctype \
-php7-dom
+php7-dom php7-session
 
 # Start OpenRC
 RUN openrc boot
@@ -21,18 +21,20 @@ COPY srcs/lighttpd.conf /etc/lighttpd/lighttpd.conf
 COPY srcs/mod_fastcgi.conf /etc/lighttpd/mod_fastcgi.conf
 
 # Install Wordpress files
-RUN mkdir -p /usr/share/webapps/
-RUN cd /usr/share/webapps && wget https://wordpress.org/wordpress-5.3.2.tar.gz\
- && tar -xvzf wordpress-5.3.2.tar.gz && rm wordpress-5.3.2.tar.gz
+RUN mkdir -p /usr/share/webapps/phpmyadmin
+RUN cd /usr/share/webapps/ && wget https://files.phpmyadmin.net/phpMyAdmin/5.0.2/phpMyAdmin-5.0.2-all-languages.tar.gz \
+ && tar -xvzf ./phpMyAdmin-5.0.2-all-languages.tar.gz && rm phpMyAdmin-5.0.2-all-languages.tar.gz
 
 RUN chown -R lighttpd /usr/share/webapps/
-COPY srcs/wp-config.php /usr/share/webapps/wordpress/wp-config.php
+# COPY srcs/wp-config.php /usr/share/webapps/wordpress/wp-config.php
 
-RUN ln -s /usr/share/webapps/wordpress /var/www/localhost/htdocs
+RUN ln -s /usr/share/webapps/phpMyAdmin-5.0.2-all-languages /var/www/localhost/htdocs
 
 # Let lighttpd make his socket
 RUN mkdir /var/run/lighttpd
 RUN chown -R lighttpd:lighttpd /var/run/lighttpd
+
+COPY srcs/config.inc.php /usr/share/webapps/phpMyAdmin-5.0.2-all-languages/config.inc.php
 
 CMD export TELEGRAF_CONFIG_PATH="/etc/telegraf.conf"; telegraf & lighttpd -f /etc/lighttpd/lighttpd.conf && tail -f /dev/null
 

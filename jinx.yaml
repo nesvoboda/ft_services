@@ -20,7 +20,7 @@ spec:
         image: angi
         ports:
         - containerPort: 80
-        - containerPort: 443
+        - containerPort: 443 
 ---
 apiVersion: v1
 kind: Service
@@ -132,6 +132,56 @@ spec:
     # - name: ftps-svc-20
     #   port: 20
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ftps-svc2
+spec:
+  type: ClusterIP
+  selector:
+    app: ftps
+  ports:
+    - name: ftp-21
+      port: 3500
+      targetPort: 21
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress-deployment
+  labels:
+    app: wordpress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+      - name: wordpress
+        imagePullPolicy: Never
+        image: wordpress
+        ports:
+        - containerPort: 80
+          name: port-21
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress-svc
+spec:
+  type: NodePort
+  selector:
+    app: wordpress
+  ports:
+    - name: http
+      port: 80
+      nodePort: 5050
+---
 apiVersion: networking.k8s.io/v1beta1 # for versions before 1.14 use extensions/v1beta1
 kind: Ingress
 metadata:
@@ -149,15 +199,155 @@ spec:
           serviceName: snginx
           servicePort: 80
 ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        imagePullPolicy: Never
+        image: mysql
+        ports:
+        - containerPort: 3306
+          name: port-3306
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ftps-svc2
+  name: mysql-svc
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
-    app: ftps
+    app: mysql
   ports:
-    - name: ftp-21
-      port: 3500
-      targetPort: 21
+    - name: http
+      port: 3306
+      nodePort: 3306
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpmyadmin-deployment
+  labels:
+    app: phpmyadmin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phpmyadmin
+  template:
+    metadata:
+      labels:
+        app: phpmyadmin
+    spec:
+      containers:
+      - name: phpmyadmin
+        imagePullPolicy: Never
+        image: phpmyadmin
+        ports:
+        - containerPort: 80
+          name: port-80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpmyadmin-svc
+spec:
+  type: NodePort
+  selector:
+    app: phpmyadmin
+  ports:
+    - name: http
+      port: 80
+      nodePort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb-deployment
+  labels:
+    app: influxdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+      - name: influxdb
+        imagePullPolicy: Never
+        image: influxdb
+        ports:
+        - containerPort: 8086
+          name: port-8086
+        - containerPort: 8088
+          name: port-8088
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: influxdb-svc
+spec:
+  type: NodePort
+  selector:
+    app: influxdb
+  ports:
+    - name: port-8086
+      port: 8086
+      nodePort: 8086
+    - name: port-8088
+      port: 8088
+      nodePort: 8088
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-deployment
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - name: grafana
+        imagePullPolicy: Never
+        image: grafana
+        ports:
+        - containerPort: 3000
+          name: port-3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-svc
+spec:
+  type: NodePort
+  selector:
+    app: grafana
+  ports:
+    - name: port-3000
+      port: 3000
+      nodePort: 3000

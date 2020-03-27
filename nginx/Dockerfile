@@ -20,6 +20,9 @@ RUN rm /etc/nginx/conf.d/default.conf
 # Copy the NGINX configuration
 COPY srcs/default.conf /etc/nginx/conf.d
 
+# Telegraf setup
+RUN apk add telegraf --repository http://nl.alpinelinux.org/alpine/edge/testing
+COPY srcs/telegraf.conf /etc/telegraf.conf
 
 
 RUN echo "<h1> Dis nginx </h1>" > /www/index.html
@@ -44,4 +47,4 @@ COPY srcs/ssl-params.conf /etc/nginx/snippets/ssl-params.conf
 EXPOSE 80
 EXPOSE 443
 
-CMD nginx && tail -f /dev/null
+CMD export TELEGRAF_CONFIG_PATH="/etc/telegraf.conf"; telegraf & nginx && tail -f /dev/null
