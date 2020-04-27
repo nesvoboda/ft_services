@@ -19,6 +19,7 @@ then
     minikube start --vm-driver=docker --extra-config=apiserver.service-node-port-range=3000-32767
 else
     minikube start --vm-driver=virtualbox --extra-config=apiserver.service-node-port-range=3000-32767
+fi
 minikube addons enable ingress
 
 printf "\e[94m\n\n --- Building Docker images for containers ---\e[0m\n\n\n";
