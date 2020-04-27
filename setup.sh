@@ -21,7 +21,13 @@ printf "\e[94m\n\n --- Building Docker images for containers ---\e[0m\n\n\n";
 
 # Set Docker links to Minikube Docker and build all images
 
-eval $(minikube docker-env) ; sudo docker build ./srcs/nginx/ --tag nginx ;\
+if [[ $OSTYPE == "linux-gnu" ]];
+then
+    minikube docker-env;
+else
+    eval $(minikube docker-env);
+fi
+sudo docker build ./srcs/nginx/ --tag nginx ;\
 sudo docker build ./srcs/ftps/ --tag ftps; \
 sudo docker build ./srcs/mysql --tag mysql; \
 sudo docker build ./srcs/wordpress --tag wordpress; \
