@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,900&display=swap" rel="stylesheet">
+
+    <title>ft_services</title>
+    <style>
+      #logo {
+        font-family: 'Lato', sans-serif;
+        font-weight: 900;
+      }
+    </style>
+  </head>
+  <body>
+    
+    <div class="container-md mt-5">
+        <div class="row mt-5 mb-5 justify-content-center">
+            <h1 id="logo"><i>ft_services</i></h1>
+        </div>
+        <!-- <div class="row mt-5 mb-3">
+            <h3>Services:</h3>
+        </div> -->
+        <div class="row mt-5">
+          <div class="card shadow-lg p-3 mb-5 border-0 col-lg mr-4 ml-4">
+            <div class="card-body">
+              <h5 class="card-title">NGINX Ingress Controller</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Exposing web services to the outside world</h6>
+              <h6 class="card-title mt-4">How to connect?</h6>
+              <p class="card-text">The Ingress controller makes our NGINX service reachable by the IP address of our cluster.</h6>
+              <p> If you're seeing this page, it is working!</p>
+            </div>
+          </div>
+          <div class="card shadow-lg p-3 mb-5 border-0 col-lg mr-4 ml-4">
+            <div class="card-body">
+              <h5 class="card-title">NGINX</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Load balancing/reverse proxy</h6>
+              <h6 class="card-title mt-4">How to connect?</h5>
+              <p class="card-text">NGINX serves any page inside its web directory over HTTP/HTTPS.</p>
+              <p> If you're seeing this page, it is working!</p>
+              <h6 class="card-title mt-4">Yeah, great! What about SSH?</h5>
+              <p class="card-text">You can SSH into the NGINX container using port 3337.</p>
+              <p class="card-text mb-1 mt-3"><strong>Port:  </strong>  <code> 3337</code></p>
+              <p class="card-text mb-1"><strong>Username:  </strong>  <code> jarvis</code></p>
+              <p class="card-text"><strong>Password:  </strong>   <code>REPLACE_WITH_SSH_PASSWORD</code></p>
+              <p class="card-text">Or just type this in terminal:</p>
+              <p class="card-text"><code>ssh -p 3337 jarvis@REPLACE_WITH_MINIKUBE_IP</code></p>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+            <div class="card shadow-lg p-3 mb-5 border-0 col-lg mr-4 ml-4">
+                <div class="card-body">
+                  <h5 class="card-title">FTPS</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">Secure FTP</h6>
+                  <p class="card-text mb-1 mt-3"><strong>Username:  </strong>  <code> uftp</code></p>
+                  <p class="card-text"><strong>Password:  </strong>   <code>REPLACE_WITH_UFTP_PASSWORD</code></p>
+                  <h6 class="card-title mt-4">How to connect?</h5>
+                  <p class="card-text">Use an FTP client (like FileZilla) to connect to <code>REPLACE_WITH_MINIKUBE_IP</code> (port 22)</p>
+                </div>
+              </div>
+              <div class="card shadow-lg p-3 mb-5 border-0 col-lg mr-4 ml-4">
+                <div class="card-body">
+                  <h5 class="card-title">Wordpress</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">Blog</h6>
+                  <p class="card-text mb-1 mt-3"><strong>Admin login:  </strong>  <code>admin</code></p>
+                  <p class="card-text"><strong>Password:  </strong>   <code>42born2code</code></p>
+                  <p class="card-text mb-1 mt-3"><strong>User:  </strong>  <code>fordprefect</code></p>
+                  <p class="card-text"><strong>Password:  </strong>   <code>42born2code</code></p>
+                  <p class="card-text mb-1 mt-3"><strong>User:  </strong>  <code>trillian</code></p>
+                  <p class="card-text"><strong>Password:  </strong>   <code>42born2code</code></p>
+                  <p class="card-text"><strong>Change WP passwords immediately!</strong></p>
+                  <a class="btn btn-primary mt-4" href="http://REPLACE_WITH_MINIKUBE_IP:5050" role="button">Open Wordpress</a>
+                </div>
+              </div>
+        </div>
+        <div class="row mt-2">
+          <div class="card shadow-lg p-3 mb-5 border-0 col-lg mr-4 ml-4">
+            <div class="card-body">
+              <h5 class="card-title">PHPMyAdmin</h5>
+              <h6 class="card-subtitle mb-2 text-muted">DB administration</h6>
+              <p class="card-text mb-1 mt-3"><strong>Login:  </strong>  <code>pmausr</code></p>
+              <p class="card-text mb-1"><strong>Password:  </strong>  <code>REPLACE_WITH_PMA_PASSWORD</code></p>
+                <a class="btn btn-primary mt-4" href="http://REPLACE_WITH_MINIKUBE_IP:5000" role="button">Open PHPMyAdmin</a>
+            </div>
+          </div>
+          <div class="card shadow-lg p-3 mb-5 border-0 col-lg mr-4 ml-4">
+            <div class="card-body">
+              <h5 class="card-title">Grafana</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Metrics and monitoring</h6>
+              <p class="card-text mb-1 mt-3"><strong>Login:  </strong>  <code>admin</code></p>
+              <p class="card-text mb-1"><strong>Password:  </strong>   <code>admin</code></p>
+              <a class="btn btn-primary mt-4" href="http://REPLACE_WITH_MINIKUBE_IP:3000" role="button">Open Grafana</a>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="card shadow-lg p-3 mb-5 border-0 col-lg mr-4 ml-4">
+            <div class="card-body">
+              <h5 class="card-title">InfluxDB</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Database for metrics</h6>
+              <h6 class="card-title mt-4">How to connect?</h5>
+                <p class="card-text">InfluxDB is available over at <code>REPLACE_WITH_MINIKUBE_IP:8086</code></p>
+            </div>
+          </div>
+        </div>
+        
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  </body>
+</html>
