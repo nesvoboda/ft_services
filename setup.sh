@@ -16,7 +16,7 @@ printf "\n\n --- Starting Minikube ---\e[0m\n\n\n";
 # Start minikube 
 if [[ $OSTYPE == "linux-gnu" ]];
 then
-    minikube start --vm-driver=docker --extra-config=apiserver.service-node-port-range=3000-32767
+    minikube start --vm-driver=docker --extra-config=apiserver.service-node-port-range=3000-32767 --extra-config=kubeadm.ignore-preflight-errors=NumCPU --force --cpus 1
 else
     minikube start --vm-driver=virtualbox --extra-config=apiserver.service-node-port-range=3000-32767
 fi
