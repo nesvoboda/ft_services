@@ -38,8 +38,14 @@ docker build ./srcs/grafana --tag grafana;\
 printf "\e[94m\n\n --- Generating passwords ---\e[0m\n\n\n";
 
 # Generate and print passwords for our services
+if [[ $OSTYPE == "linux-gnu" ]];
+then
+    CLUSTER_IP="$(kubectl get node -o=custom-columns='DATA:status.addresses[0].address' | sed -n 2p)"
+else
+    CLUSTER_IP="$(minikube ip)"
+fi
 
-CLUSTER_IP="$(minikube ip)"
+
 FTP_PASSWORD="$(openssl rand -hex 20)"
 WPUSR_PASSWORD="$(openssl rand -hex 20)"
 MYSQL_ROOT_PASSWORD="$(openssl rand -hex 20)"
