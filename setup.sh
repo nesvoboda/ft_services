@@ -14,20 +14,20 @@ printf "\n";
 printf "\n\n --- Starting Minikube ---\e[0m\n\n\n";
 
 # Start minikube 
-minikube start --vm-driver=virtualbox --extra-config=apiserver.service-node-port-range=3000-32767
-minikube addons enable ingress
+sudo minikube start --vm-driver=virtualbox --extra-config=apiserver.service-node-port-range=3000-32767
+sudo minikube addons enable ingress
 
 printf "\e[94m\n\n --- Building Docker images for containers ---\e[0m\n\n\n";
 
 # Set Docker links to Minikube Docker and build all images
 
-eval $(minikube docker-env) ; docker build ./srcs/nginx/ --tag nginx ;\
-docker build ./srcs/ftps/ --tag ftps; \
-docker build ./srcs/mysql --tag mysql; \
-docker build ./srcs/wordpress --tag wordpress; \
-docker build ./srcs/phpmyadmin --tag phpmyadmin;\
-docker build ./srcs/influxdb --tag influxdb;\
-docker build ./srcs/grafana --tag grafana;\
+eval $(minikube docker-env) ; sudo docker build ./srcs/nginx/ --tag nginx ;\
+sudo docker build ./srcs/ftps/ --tag ftps; \
+sudo docker build ./srcs/mysql --tag mysql; \
+sudo docker build ./srcs/wordpress --tag wordpress; \
+sudo docker build ./srcs/phpmyadmin --tag phpmyadmin;\
+sudo docker build ./srcs/influxdb --tag influxdb;\
+sudo docker build ./srcs/grafana --tag grafana;\
 
 
 printf "\e[94m\n\n --- Generating passwords ---\e[0m\n\n\n";
