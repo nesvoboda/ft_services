@@ -17,27 +17,9 @@ printf "\n\n --- Starting Minikube ---\e[0m\n\n\n";
 minikube start --vm-driver=virtualbox --extra-config=apiserver.service-node-port-range=3000-32767
 minikube addons enable ingress
 
-
-
-# sed -i "" "s/CLUSTER_IP/$CLUSTER_IP/g" ftps/srcs/vsftpd.conf
-# sed -i "" "s/CLUSTER_IP/$CLUSTER_IP/g" wordpress/srcs/wp-config.php
-# sed -i "" "s/CLUSTER_IP/$CLUSTER_IP/g" phpmyadmin/srcs/config.inc.php
-# sed -i "" "s/CLUSTER_IP/$CLUSTER_IP/g" mysql/srcs/wpdb.sql
-
-# sed -i "" "s/CLUSTER_IP/$CLUSTER_IP/g" grafana/srcs/telegraf.conf
-# sed -i "" "s/CLUSTER_IP/$CLUSTER_IP/g" influxdb/srcs/telegraf.conf
-# sed -i "" "s/CLUSTER_IP/$CLUSTER_IP/g" mysql/srcs/telegraf.conf
-# sed -i "" "s/CLUSTER_IP/$CLUSTER_IP/g" nginx/srcs/telegraf.conf
-# sed -i "" "s/CLUSTER_IP/$CLUSTER_IP/g" phpmyadmin/srcs/telegraf.conf
-# sed -i "" "s/CLUSTER_IP/$CLUSTER_IP/g" wordpress/srcs/telegraf.conf
-# sed -i "" "s/CLUSTER_IP/$CLUSTER_IP/g" ftps/srcs/telegraf.conf
-
-# sed -i "" "s/CLUSTER_IP/$CLUSTER_IP/g" grafana/srcs/provisioning/datasources/all.yaml
-
+printf "\e[94m\n\n --- Building Docker images for containers ---\e[0m\n\n\n";
 
 # Set Docker links to Minikube Docker and build all images
-
-printf "\e[94m\n\n --- Building Docker images for containers ---\e[0m\n\n\n";
 
 eval $(minikube docker-env) ; docker build ./srcs/nginx/ --tag nginx ;\
 docker build ./srcs/ftps/ --tag ftps; \
@@ -48,26 +30,9 @@ docker build ./srcs/influxdb --tag influxdb;\
 docker build ./srcs/grafana --tag grafana;\
 
 
-
-# # sed -i "" "s/$CLUSTER_IP/CLUSTER_IP/g" ftps/srcs/vsftpd.conf
-# # sed -i "" "s/$CLUSTER_IP/CLUSTER_IP/g" wordpress/srcs/wp-config.php
-# # sed -i "" "s/$CLUSTER_IP/CLUSTER_IP/g" phpmyadmin/srcs/config.inc.php
-# # sed -i "" "s/$CLUSTER_IP/CLUSTER_IP/g" mysql/srcs/wpdb.sql
-
-# # sed -i "" "s/$CLUSTER_IP/CLUSTER_IP/g" grafana/srcs/telegraf.conf
-# # sed -i "" "s/$CLUSTER_IP/CLUSTER_IP/g" influxdb/srcs/telegraf.conf
-# # sed -i "" "s/$CLUSTER_IP/CLUSTER_IP/g" mysql/srcs/telegraf.conf
-# # sed -i "" "s/$CLUSTER_IP/CLUSTER_IP/g" nginx/srcs/telegraf.conf
-# # sed -i "" "s/$CLUSTER_IP/CLUSTER_IP/g" phpmyadmin/srcs/telegraf.conf
-# # sed -i "" "s/$CLUSTER_IP/CLUSTER_IP/g" wordpress/srcs/telegraf.conf
-# # sed -i "" "s/$CLUSTER_IP/CLUSTER_IP/g" ftps/srcs/telegraf.conf
-
-
-
-# sed -i "" "s/$CLUSTER_IP/CLUSTER_IP/g" grafana/srcs/provisioning/datasources/all.yaml
-
-
 printf "\e[94m\n\n --- Generating passwords ---\e[0m\n\n\n";
+
+# Generate and print passwords for our services
 
 CLUSTER_IP="$(minikube ip)"
 FTP_PASSWORD="$(openssl rand -hex 20)"
@@ -82,40 +47,57 @@ printf "PHPMYADMIN PASSWORD IS %s\n" $PMA_PASSWORD
 printf "SSH PASSWORD IS %s\n" $SSH_PASSWORD
 
 
-# Pass Minikube's internal address to container environments
-# by adding it to the Kubernetes YAML config
+# Pass passwords (and minikube's IP) to container environments
 
-sed -i "" "s/REPLACE_WITH_MINIKUBE_IP/$CLUSTER_IP/g" srcs/ft_services.yaml
+# Due to COVID-19 this script may be run both on Mac and Linux so we have to
+# check before using sed's BSD or Linux syntax
 
-# Generate and pass passwords to container environments
-
-sed -i "" "s/REPLACE_WITH_FTP_PASSWORD/$FTP_PASSWORD/g" srcs/ft_services.yaml
-sed -i "" "s/REPLACE_WITH_WPUSR_PASSWORD/$WPUSR_PASSWORD/g" srcs/ft_services.yaml
-sed -i "" "s/REPLACE_WITH_MYSQL_ROOT_PASSWORD/$MYSQL_ROOT_PASSWORD/g" srcs/ft_services.yaml
-sed -i "" "s/REPLACE_WITH_PMA_PASSWORD/$PMA_PASSWORD/g" srcs/ft_services.yaml
-sed -i "" "s/REPLACE_WITH_SSH_PASSWORD/$SSH_PASSWORD/g" srcs/ft_services.yaml
+if [[ $OSTYPE == "linux-gnu" ]];
+then
+    sed -i "s/REPLACE_WITH_MINIKUBE_IP/$CLUSTER_IP/g" srcs/ft_services.yaml
+    sed -i "s/REPLACE_WITH_FTP_PASSWORD/$FTP_PASSWORD/g" srcs/ft_services.yaml
+    sed -i "s/REPLACE_WITH_WPUSR_PASSWORD/$WPUSR_PASSWORD/g" srcs/ft_services.yaml
+    sed -i "s/REPLACE_WITH_MYSQL_ROOT_PASSWORD/$MYSQL_ROOT_PASSWORD/g" srcs/ft_services.yaml
+    sed -i "s/REPLACE_WITH_PMA_PASSWORD/$PMA_PASSWORD/g" srcs/ft_services.yaml
+    sed -i "s/REPLACE_WITH_SSH_PASSWORD/$SSH_PASSWORD/g" srcs/ft_services.yaml
+else
+    sed -i "" "s/REPLACE_WITH_MINIKUBE_IP/$CLUSTER_IP/g" srcs/ft_services.yaml
+    sed -i "" "s/REPLACE_WITH_FTP_PASSWORD/$FTP_PASSWORD/g" srcs/ft_services.yaml
+    sed -i "" "s/REPLACE_WITH_WPUSR_PASSWORD/$WPUSR_PASSWORD/g" srcs/ft_services.yaml
+    sed -i "" "s/REPLACE_WITH_MYSQL_ROOT_PASSWORD/$MYSQL_ROOT_PASSWORD/g" srcs/ft_services.yaml
+    sed -i "" "s/REPLACE_WITH_PMA_PASSWORD/$PMA_PASSWORD/g" srcs/ft_services.yaml
+    sed -i "" "s/REPLACE_WITH_SSH_PASSWORD/$SSH_PASSWORD/g" srcs/ft_services.yaml
+fi
 
 printf "\e[94m\n\n --- Save them somewhere. Now applying Kubernetes configuration: ---\e[0m\n\n\n";
 
 kubectl apply -f srcs/ft_services.yaml
 
-# Remove Minikube's IP from Kubernetes YAML config for future runs
+# Remove context from Kubernetes YAML config for future runs
 
-sed -i "" "s/$CLUSTER_IP/REPLACE_WITH_MINIKUBE_IP/g" srcs/ft_services.yaml
+if [[ $OSTYPE == "linux-gnu" ]];
+then
+    sed -i "s/$CLUSTER_IP/REPLACE_WITH_MINIKUBE_IP/g" srcs/ft_services.yaml
+    sed -i "s/$FTP_PASSWORD/REPLACE_WITH_FTP_PASSWORD/g" srcs/ft_services.yaml
+    sed -i "s/$WPUSR_PASSWORD/REPLACE_WITH_WPUSR_PASSWORD/g" srcs/ft_services.yaml
+    sed -i "s/$MYSQL_ROOT_PASSWORD/REPLACE_WITH_MYSQL_ROOT_PASSWORD/g" srcs/ft_services.yaml
+    sed -i "s/$PMA_PASSWORD/REPLACE_WITH_PMA_PASSWORD/g" srcs/ft_services.yaml
+else
+    sed -i "" "s/$CLUSTER_IP/REPLACE_WITH_MINIKUBE_IP/g" srcs/ft_services.yaml
+    sed -i "" "s/$FTP_PASSWORD/REPLACE_WITH_FTP_PASSWORD/g" srcs/ft_services.yaml
+    sed -i "" "s/$WPUSR_PASSWORD/REPLACE_WITH_WPUSR_PASSWORD/g" srcs/ft_services.yaml
+    sed -i "" "s/$MYSQL_ROOT_PASSWORD/REPLACE_WITH_MYSQL_ROOT_PASSWORD/g" srcs/ft_services.yaml
+    sed -i "" "s/$PMA_PASSWORD/REPLACE_WITH_PMA_PASSWORD/g" srcs/ft_services.yaml
 
-# Remove passwords from Kubernetes YAML config for future runs
 
-sed -i "" "s/$FTP_PASSWORD/REPLACE_WITH_FTP_PASSWORD/g" srcs/ft_services.yaml
-sed -i "" "s/$WPUSR_PASSWORD/REPLACE_WITH_WPUSR_PASSWORD/g" srcs/ft_services.yaml
-sed -i "" "s/$MYSQL_ROOT_PASSWORD/REPLACE_WITH_MYSQL_ROOT_PASSWORD/g" srcs/ft_services.yaml
-sed -i "" "s/$PMA_PASSWORD/REPLACE_WITH_PMA_PASSWORD/g" srcs/ft_services.yaml
+# Patch NGINX Ingress controller configmaps in order to enable FTPS
+# (a non-HTTP TCP service) discovery and routing
 
 kubectl patch deployment nginx-ingress-controller --patch "$(cat srcs/nginx-ingress-controller-patch.yaml)" -n kube-system
 kubectl patch configmap tcp-services -n kube-system --patch "$(cat srcs/tcp-services-patch.yml)"
 
 printf "\e[94m\n\n --- You're all set! ---\e[0m\n\n\n";
 printf "\n\n --- Your cluster ip is %s ---\e[0m\n\n\n" $CLUSTER_IP;
-
 
 printf "\e[94m\n\n --- Almost forgot! Starting dashboard. Don't close this terminal window. ---\e[0m\n\n\n";
 
