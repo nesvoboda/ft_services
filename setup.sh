@@ -25,13 +25,7 @@ minikube addons enable ingress
 printf "\e[94m\n\n --- Building Docker images for containers ---\e[0m\n\n\n";
 
 # Set Docker links to Minikube Docker and build all images
-
-if [[ $OSTYPE == "linux-gnu" ]];
-then
-    minikube docker-env;
-else
-    eval $(minikube docker-env);
-fi
+eval $(minikube docker-env);
 docker build ./srcs/nginx/ --tag nginx ;\
 docker build ./srcs/ftps/ --tag ftps; \
 docker build ./srcs/mysql --tag mysql; \
@@ -99,7 +93,7 @@ else
     sed -i "" "s/$WPUSR_PASSWORD/REPLACE_WITH_WPUSR_PASSWORD/g" srcs/ft_services.yaml
     sed -i "" "s/$MYSQL_ROOT_PASSWORD/REPLACE_WITH_MYSQL_ROOT_PASSWORD/g" srcs/ft_services.yaml
     sed -i "" "s/$PMA_PASSWORD/REPLACE_WITH_PMA_PASSWORD/g" srcs/ft_services.yaml
-
+fi
 
 # Patch NGINX Ingress controller configmaps in order to enable FTPS
 # (a non-HTTP TCP service) discovery and routing
