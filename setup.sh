@@ -18,20 +18,23 @@ then
     docker ps > /dev/null;
     if [[ $? == 1 ]];
     then
-        printf "\n\n ERROR! It seems that docker doesn't work properly. \n
-        This may be the case if you're using 42's VM.\n
+        printf "\e[31m\n\n --- ERROR! It seems that docker doesn't work properly.
+        This may be the case if you're using 42's VM.
         We will attempt to fix it. In order for it to start working, you\n
-        will have to log out and login again. Sorry!\e[0m\n\n\n";
-        sudo groupadd docker; sudo usermod -aG docker $USER;
+        will have to log out and login again. Sorry! ---\e[0m\n\n\n";
+        sudo usermod -aG docker $USER;
+        printf "\e[94m\n\n --- Nice! We've applied the fix. Now please log out and log in again. ---\e[0m\n\n\n";
         exit 1;
+    else
+        printf "\e[94m\n\n --- Nice! Docker works fine.  ---\e[0m\n\n\n";
     fi
 fi
-printf "\n\n --- Starting Minikube ---\e[0m\n\n\n";
+printf "\e[94m\n\n --- Starting Minikube ---\e[0m\n\n\n";
 
 # Start minikube 
 if [[ $OSTYPE == "linux-gnu" ]];
 then
-    minikube start --vm-driver=docker --extra-config=apiserver.service-node-port-range=3000-32767 --extra-config=kubeadm.ignore-preflight-errors=NumCPU --force --cpus 1
+    minikube start --vm-driver=docker --extra-config=apiserver.service-node-port-range=3000-32767
 else
     minikube start --vm-driver=virtualbox --extra-config=apiserver.service-node-port-range=3000-32767
 fi
