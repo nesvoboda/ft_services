@@ -4,7 +4,7 @@ RUN apk add grafana --repository http://uk.alpinelinux.org/alpine/edge/testing
 
 COPY srcs/grafana.ini /etc/grafana.ini
 
-RUN apk add telegraf --repository http://nl.alpinelinux.org/alpine/edge/testing
+RUN apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing
 COPY srcs/telegraf.conf /etc/telegraf.conf
 # RUN sed -i "s/CLUSTER_IP/$CLUSTER_IP/g" /etc/telegraf.conf
 

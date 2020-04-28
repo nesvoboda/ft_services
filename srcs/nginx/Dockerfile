@@ -32,7 +32,7 @@ COPY srcs/default.conf /etc/nginx/conf.d
 COPY srcs/index.html /www/index.html
 
 # Telegraf setup
-RUN apk add telegraf --repository http://nl.alpinelinux.org/alpine/edge/testing
+RUN apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing
 COPY srcs/telegraf.conf /etc/telegraf.conf
 
 # Creating a self-signed certificate

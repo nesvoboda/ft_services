@@ -7,7 +7,7 @@ COPY srcs/vsftpd.conf /etc/vsftpd/vsftpd.conf
 RUN mkdir /ftp && echo "42born2code" > /ftp/testfile
 
 # Telegraf setup
-RUN apk add telegraf --repository http://nl.alpinelinux.org/alpine/edge/testing
+RUN apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing
 COPY srcs/telegraf.conf /etc/telegraf.conf
 
 RUN adduser \

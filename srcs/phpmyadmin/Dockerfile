@@ -13,7 +13,7 @@ php7-dom php7-session php-mbstring php-xml
 RUN openrc boot
 
 # Telegraf setup
-RUN apk add telegraf --repository http://nl.alpinelinux.org/alpine/edge/testing
+RUN apk add telegraf --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing
 COPY srcs/telegraf.conf /etc/telegraf.conf
 # RUN sed -i "s/CLUSTER_IP/$CLUSTER_IP/g" /etc/telegraf.conf
 # RUN sed -i "s/PMA_PASSWORD/$PMA_PASSWORD/g" /etc/telegraf.conf
