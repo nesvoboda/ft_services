@@ -8,8 +8,8 @@ CREATE DATABASE IF NOT EXISTS wpdb;
 CREATE DATABASE IF NOT EXISTS phpmyadmin;
 CREATE USER 'wpusr'@'%' IDENTIFIED BY '$WPUSR_PASSWORD';
 GRANT ALL ON wpdb.* to 'wpusr'@'%';
-GRANT ALL ON phpmyadmin.* to 'pmausr'@'%';
 CREATE USER 'pmausr'@'%' IDENTIFIED BY '$PMA_PASSWORD';
+GRANT ALL ON phpmyadmin.* to 'pmausr'@'%';
 GRANT ALL ON *.* TO 'pmausr'@'%'
 DROP DATABASE IF EXISTS test ;
 FLUSH PRIVILEGES ;
