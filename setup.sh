@@ -11,6 +11,21 @@ printf "\n";
 printf "@ashishae";
 printf "\n";
 printf "\n";
+
+if [[ $OSTYPE == "linux-gnu" ]];
+then
+    printf "\n\n --- Testing if docker works ---\e[0m\n\n\n";
+    docker ps > /dev/null;
+    if [[ $? == 1 ]];
+    then
+        printf "\n\n ERROR! It seems that docker doesn't work properly. \n
+        This may be the case if you're using 42's VM.\n
+        We will attempt to fix it. In order for it to start working, you\n
+        will have to log out and login again. Sorry!\e[0m\n\n\n";
+        sudo groupadd docker; sudo usermod -aG docker $USER;
+        exit 1;
+    fi
+fi
 printf "\n\n --- Starting Minikube ---\e[0m\n\n\n";
 
 # Start minikube 
