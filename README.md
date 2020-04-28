@@ -16,8 +16,9 @@ A script to launch a small Kubernetes cluster with Nginx, Wordpress, PHPMyAdmin,
 ### How to install?
 
 1. Clone the repo.
-2. Launch setup.sh.
+2. Launch `setup.sh`.
 3. Done!
+4. `minikube delete` to stop everything.
 
 ![Screenshot of ft_services](https://imgur.com/9glgac0.png "Screenshot")
 
