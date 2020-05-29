@@ -96,7 +96,7 @@
               {
                 "key": "host",
                 "operator": "=",
-                "value": "wordpress-container"
+                "value": "phpmyadmin-container"
               }
             ]
           }

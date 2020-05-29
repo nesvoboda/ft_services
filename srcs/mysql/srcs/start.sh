@@ -10,7 +10,7 @@ CREATE USER 'wpusr'@'%' IDENTIFIED BY '$WPUSR_PASSWORD';
 GRANT ALL ON wpdb.* to 'wpusr'@'%';
 CREATE USER 'pmausr'@'%' IDENTIFIED BY '$PMA_PASSWORD';
 GRANT ALL ON phpmyadmin.* to 'pmausr'@'%';
-GRANT ALL ON *.* TO 'pmausr'@'%'
+GRANT ALL ON *.* TO 'pmausr'@'%';
 DROP DATABASE IF EXISTS test ;
 FLUSH PRIVILEGES ;
 
